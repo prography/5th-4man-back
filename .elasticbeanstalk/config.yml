@@ -4,6 +4,7 @@ branch-defaults:
     group_suffix: null
   master:
     environment: fourman-backend-dev
+    group_suffix: null
 global:
   application_name: fourman_backend
   branch: null
@@ -14,7 +15,7 @@ global:
   instance_profile: null
   platform_name: null
   platform_version: null
-  profile: fourman
+  profile: eb-cli
   repository: null
   sc: git
   workspace_type: Application
