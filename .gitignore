@@ -225,3 +225,7 @@ fabric.properties
 # Custom
 .idea/
 secrets.json
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
