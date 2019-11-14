@@ -52,8 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
-    'social_django',
-    'rest_social_auth',
     'teams',
     'accounts',
     'drf_yasg',
@@ -175,3 +173,12 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+# Social login 
+SOCIAL_AUTH_GITHUB_KEY = get_secret('SOCIAL_AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = get_secret('SOCIAL_AUTH_GITHUB_SECRET')
+
+AUTHENTICATION_BACKENDS = [
+    'config.backends.GithubBackend',  # Custom Backend
+    'django.contrib.auth.backends.ModelBackend',
+]
