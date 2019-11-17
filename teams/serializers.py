@@ -33,11 +33,12 @@ class TagSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     leader = TeammateSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), pk_field=serializers.CharField())
+    image = serializers.ImageField(required=False, use_url=True)
 
     class Meta:
         model = Team
         fields = (
-            'id', 'tags', 'leader', 'title', 'objective', 'end_date', 'description', 'created_at',
+            'id', 'tags', 'leader', 'image', 'title', 'objective', 'end_date', 'description', 'created_at',
             'updated_at')
 
     def create(self, validated_data):

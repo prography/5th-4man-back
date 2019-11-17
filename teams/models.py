@@ -23,8 +23,13 @@ class Tag(models.Model):
         return self.name
 
 
+def get_image_filename(instance, file_name):
+    return "team/images/%s" % (instance.id)
+
+
 class Team(models.Model):
     leader = models.ForeignKey(User, related_name='teams', verbose_name='리더', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="team/images/", null=True)
     skills = models.ManyToManyField(Skill, related_name='teams', verbose_name='스킬')
     tags = models.ManyToManyField(Tag, related_name='teams', verbose_name='태그')
     title = models.CharField('제목', max_length=20)
