@@ -37,7 +37,7 @@ def get_secret(setting, secrets=secrets):
 SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -93,12 +93,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 if DEBUG == True:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'fourman_db',
-            'USER': 'admin',
-            'PASSWORD': 'fourman4444',
-            'HOST': 'localhost',
-            'PORT': '',
+            'USER': 'fourman',
+            'PASSWORD': get_secret('RDS_PASSWORD'),
+            'HOST': 'fourman-db.cjdsbfkv9mbq.ap-northeast-2.rds.amazonaws.com',
+            'PORT': '5432',
         }
     }
 else:

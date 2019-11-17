@@ -29,9 +29,3 @@ class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
         fields = ('id', 'leader', 'title', 'objective', 'end_date', 'description', 'created_at', 'updated_at')
-
-    def create(self, validated_data):
-        user = self.context.get("request").user
-        validated_data["leader"] = user
-        request = super().create(validated_data)
-        return request

@@ -10,3 +10,12 @@ class TeamViewSet(ModelViewSet):
     serializer_class = TeamSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsLeaderOrReadCreateOnly,)
 
+    def perform_create(self, serializer):
+        serializer.save(leader=self.request.user)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        skill = self.request.query_params.get('', None)
+        if skill is not None:
+            queryset = queryset.filter()
+        return queryset
