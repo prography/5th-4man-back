@@ -5,7 +5,7 @@ User = get_user_model()
 
 
 class Skill(models.Model):
-    name = models.CharField(max_length=10, primary_key=True)
+    name = models.CharField(max_length=10, unique=True)
 
 
 class Recruit(models.Model):
@@ -18,6 +18,9 @@ class Application(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=10, primary_key=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Team(models.Model):
