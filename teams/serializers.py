@@ -1,7 +1,6 @@
-from django.db.models import CharField
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Team, Tag, Skill
+from .models import Team
 
 User = get_user_model()
 '''
@@ -24,21 +23,15 @@ class TeammateSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'nickname')
 
 
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ('name',)
-
-
 class TeamSerializer(serializers.ModelSerializer):
     leader = TeammateSerializer(read_only=True)
-    tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), pk_field=serializers.CharField())
 
     class Meta:
         model = Team
-        fields = (
-            'id', 'tags', 'leader', 'title', 'objective', 'end_date', 'description', 'created_at',
-            'updated_at')
+        fields = ('id', 'leader', 'title', 'objective', 'end_date', 'description', 'created_at', 'updated_at')
 
     def create(self, validated_data):
-        return super().create(validated_data)
+        user = self.context.get("request").user
+        validated_data["leader"] = user
+        request = super().create(validated_data)
+        return request
