@@ -5,7 +5,7 @@ User = get_user_model()
 
 
 class Skill(models.Model):
-    order_key = models.PositiveIntegerField()
+    name = models.CharField(max_length=10, unique=True)
 
 
 class Recruit(models.Model):
@@ -16,12 +16,19 @@ class Application(models.Model):
     pass
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=10, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Team(models.Model):
     leader = models.ForeignKey(User, related_name='teams', verbose_name='리더', on_delete=models.CASCADE)
-    skills = models.ManyToManyField(Skill, related_name='teams', verbose_name='기술')
+    skills = models.ManyToManyField(Skill, related_name='teams', verbose_name='스킬')
+    tags = models.ManyToManyField(Tag, related_name='teams', verbose_name='태그')
     title = models.CharField('제목', max_length=20)
     objective = models.CharField('목적', max_length=1)
-    recruit_count = models.PositiveSmallIntegerField('모집 인원')
     recruit = models.ManyToManyField(User)
     end_date = models.DateTimeField('마감일')
     description = models.TextField('세부 설명')
