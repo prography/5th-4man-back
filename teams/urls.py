@@ -1,8 +1,7 @@
 from rest_framework import routers
-from .views import TeamViewSet, TagViewSet
+from .views import TeamViewSet
 
 router = routers.SimpleRouter()
-router.register(r'tags', TagViewSet)
 router.register(r'', TeamViewSet)
 
 urlpatterns = [

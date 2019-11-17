@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import json
 from django.core.exceptions import ImproperlyConfigured
-from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,7 +37,7 @@ def get_secret(setting, secrets=secrets):
 SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -94,12 +93,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 if DEBUG == True:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'fourman_db',
-            'USER': 'fourman',
-            'PASSWORD': get_secret('RDS_PASSWORD'),
-            'HOST': 'fourman-db.cjdsbfkv9mbq.ap-northeast-2.rds.amazonaws.com',
-            'PORT': '5432',
+            'USER': 'admin',
+            'PASSWORD': 'fourman4444',
+            'HOST': 'localhost',
+            'PORT': '',
         }
     }
 else:
@@ -183,7 +182,3 @@ AUTHENTICATION_BACKENDS = [
     'config.backends.GithubBackend',  # Custom Backend
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=100),
-}
