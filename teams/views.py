@@ -29,13 +29,10 @@ class TeamViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        skill = self.request.query_params.get('', None)
         if self.action == 'recent':
             queryset = queryset[:12]
-        if skill is not None:
-            queryset = queryset.filter()
         return queryset
 
     @action(methods=["get"], detail=False)
     def recent(self, request, *args, **kwargs):
-        return self.list(request)
+        return self.list(request, *args, **kwargs)

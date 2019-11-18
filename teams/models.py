@@ -32,8 +32,8 @@ class Team(models.Model):
     recruit = models.ManyToManyField(User)
     end_date = models.DateTimeField('마감일')
     description = models.TextField('세부 설명')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField('생성 시각', auto_now_add=True)
+    updated_at = models.DateTimeField('수정 시각', auto_now=True)
 
 
 class BookMark(models.Model):

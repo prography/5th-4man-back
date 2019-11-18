@@ -39,6 +39,3 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'tags', 'leader', 'title', 'objective', 'end_date', 'description', 'created_at',
             'updated_at')
-
-    def create(self, validated_data):
-        return super().create(validated_data)
