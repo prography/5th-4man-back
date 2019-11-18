@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from .models import Team, Tag
 from .serializers import TeamSerializer, TagSerializer
 from .permissions import IsLeaderOrReadCreateOnly
@@ -36,3 +37,14 @@ class TeamViewSet(ModelViewSet):
     @action(methods=["get"], detail=False)
     def recent(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+    @action(methods=["get"], detail=True, name="Like Team")
+    def like(self, request, pk=None):
+        user = request.user
+        team = Team.objects.get(pk=pk)
+
+        if user in team.likes.all():
+            team.likes.remove(user)
+        else:
+            team.likes.add(user)
+        return Response(TeamSerializer(team).data)
