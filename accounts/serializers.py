@@ -42,5 +42,8 @@ class SocialTokenObtainPairSerializer(SocialTokenObtainSerializer):
 
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
+        data['is_new'] = False
+        if not self.user.email and not self.user.nickname:
+            data['is_new'] = True
 
         return data
