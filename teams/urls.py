@@ -1,9 +1,10 @@
 from rest_framework import routers
-from .views import TeamViewSet
+from .views import TeamViewSet, TagViewSet
 
-router = routers.SimpleRouter()
-router.register(r'', TeamViewSet)
+team_router = routers.SimpleRouter()
+team_router.register(r'', TeamViewSet)
+tag_router = routers.SimpleRouter()
+tag_router.register(r'', TagViewSet)
 
 urlpatterns = [
 ]
-urlpatterns += router.urls
