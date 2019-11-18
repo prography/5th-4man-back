@@ -19,6 +19,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from teams.urls import team_router, tag_router
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -37,6 +38,7 @@ urlpatterns = [
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
-    path('teams/', include('teams.urls')),
+    path('account/', include('accounts.urls')),
+    path('team/', include(team_router.urls)),
+    path('tag/', include(tag_router.urls)),
 ]
