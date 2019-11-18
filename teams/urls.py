@@ -6,5 +6,4 @@ router.register(r'', TeamViewSet)
 
 urlpatterns = [
 ]
-
 urlpatterns += router.urls
