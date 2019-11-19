@@ -41,7 +41,7 @@ class TeamViewSet(ModelViewSet):
     @action(methods=["get"], detail=True, name="Like Team")
     def like(self, request, pk=None):
         user = request.user
-        team = Team.objects.get(pk=pk)
+        team = self.get_object()
 
         if user in team.likes.all():
             team.likes.remove(user)
