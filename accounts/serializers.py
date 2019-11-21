@@ -37,10 +37,24 @@ class SocialTokenObtainPairSerializer(SocialTokenObtainSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-
         refresh = self.get_token(self.user)
 
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
+        data['user_id'] = self.user.id
+        data['is_new'] = False
+
+        if not self.user.email and not self.user.nickname:
+            data['is_new'] = True
 
         return data
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+
+    def create(self, validated_data):
+        user = self.Meta.model.objects.create_user(**validated_data)
+        return user
