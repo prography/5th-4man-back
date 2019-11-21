@@ -13,4 +13,5 @@ class User(AbstractUser):
     profile = models.OneToOneField(GithubProfile, on_delete=models.SET_NULL, null=True, blank=True,
                                    related_name='user', verbose_name='프로필')
     nickname = models.CharField('별명', max_length=10, blank=True)
+    introduction = models.CharField('별명', max_length=100, blank=True)
     image = models.ImageField('프로필 사진', upload_to="user_image/profile/%Y/%m/%d/", blank=True)
