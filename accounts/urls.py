@@ -9,7 +9,7 @@ user_router.register(r'', UserViewSet)
 urlpatterns = [
     path('token/', SocialTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('oauth/github', GithubOauthRedirectView.as_view()),
+    path('oauth/github/', GithubOauthRedirectView.as_view()),
 ]
 
 urlpatterns += user_router.urls
