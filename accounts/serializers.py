@@ -53,7 +53,7 @@ class SocialTokenObtainPairSerializer(SocialTokenObtainSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'nickname', 'email', 'introduction')
 
     def create(self, validated_data):
         user = self.Meta.model.objects.create_user(**validated_data)
