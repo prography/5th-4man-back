@@ -23,6 +23,7 @@ class Team(models.Model):
     leader = models.ForeignKey(User, related_name='teams', verbose_name='리더', on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, related_name='teams', verbose_name='태그')
     title = models.CharField('제목', max_length=20)
+    image = models.ImageField('이미지', upload_to="team/image/%Y/%m/%d/", default='default.png')
     objective = models.CharField('목적', max_length=1, blank=True)
     likes = models.ManyToManyField(User, related_name='like_teams', verbose_name="좋아요")
     end_date = models.DateTimeField('마감일')
