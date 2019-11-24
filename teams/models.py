@@ -28,12 +28,19 @@ class Team(models.Model):
     likes = models.ManyToManyField(User, related_name='like_teams', verbose_name="좋아요")
     end_date = models.DateTimeField('마감일')
     description = models.TextField('세부 설명')
+    max_personnel = models.PositiveSmallIntegerField('최대 인원')
+    current_personnel = models.PositiveSmallIntegerField('현재 인원', default=0)
     created_at = models.DateTimeField('생성 시각', auto_now_add=True)
     updated_at = models.DateTimeField('수정 시각', auto_now=True)
 
     @property
     def like_count(self):
-        return self.likes.count()
+        like_count = getattr(self, '__like_count', self.likes.count())
+        return like_count
+
+    @like_count.setter
+    def like_count(self, count):
+        self.__like_count = count
 
 
 class BookMark(models.Model):

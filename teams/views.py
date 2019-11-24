@@ -1,3 +1,5 @@
+from django.db.models import Count
+from rest_framework import filters
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
@@ -11,19 +13,28 @@ class TagViewSet(ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (AllowAny,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        key = self.request.query_params.get('search', None)
-        if key is not None:
-            queryset = queryset.filter(name__startswith=key)
-        return queryset
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     key = self.request.query_params.get('search', None)
+    #     if key is not None:
+    #         queryset = queryset.filter(name__startswith=key)
+    #     return queryset
 
 
 class TeamViewSet(ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, IsLeaderOrReadCreateOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly, IsLeaderOrReadCreateOnly)
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('created_at', 'like_count')
+    ordering = ('created_at',)
+
+    def filter_queryset(self, queryset):
+        queryset = queryset.annotate(like_count=Count('likes'))
+        return super().filter_queryset(queryset)
 
     def perform_create(self, serializer):
         serializer.save(leader=self.request.user)
