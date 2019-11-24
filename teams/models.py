@@ -35,7 +35,12 @@ class Team(models.Model):
 
     @property
     def like_count(self):
-        return self.likes.count()
+        like_count = getattr(self, '__like_count', self.likes.count())
+        return like_count
+
+    @like_count.setter
+    def like_count(self, count):
+        self.__like_count = count
 
 
 class BookMark(models.Model):
