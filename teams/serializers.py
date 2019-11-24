@@ -26,5 +26,5 @@ class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
         fields = (
-            'id', 'tags', 'likes', 'like_count', 'leader', 'title', 'end_date', 'description', 'image', 'created_at',
-            'updated_at')
+            'id', 'tags', 'likes', 'like_count', 'leader', 'title', 'end_date', 'description', 'image', 'max_personnel',
+            'current_personnel', 'created_at', 'updated_at')
