@@ -7,3 +7,8 @@ class IsLeaderOrReadCreateOnly(permissions.BasePermission):
             return True
         elif request.method in ('PUT', 'PATCH', 'DELETE',):
             return obj.leader == request.user
+
+
+class IsAuthor(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.author == request.user
