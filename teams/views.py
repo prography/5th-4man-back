@@ -1,12 +1,13 @@
 from django.db.models import Count
 from rest_framework import filters
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Team, Tag
-from .serializers import TeamSerializer, TagSerializer
-from .permissions import IsLeaderOrReadCreateOnly
+from .models import Team, Tag, Comment
+from .serializers import TeamSerializer, TagSerializer, CommentSerializer
+from .permissions import IsLeaderOrReadCreateOnly, IsAuthor
 
 
 class TagViewSet(ModelViewSet):
@@ -16,12 +17,17 @@ class TagViewSet(ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     key = self.request.query_params.get('search', None)
-    #     if key is not None:
-    #         queryset = queryset.filter(name__startswith=key)
-    #     return queryset
+
+class CommentViewSet(mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
+                     GenericViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated, IsAuthor)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
 class TeamViewSet(ModelViewSet):
