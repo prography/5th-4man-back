@@ -39,12 +39,6 @@ class TeamViewSet(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(leader=self.request.user)
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.action == 'recent':
-            queryset = queryset[:12]
-        return queryset
-
     @action(methods=["get"], detail=False)
     def recent(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
