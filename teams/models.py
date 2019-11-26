@@ -43,5 +43,9 @@ class Team(models.Model):
         self.__like_count = count
 
 
-class BookMark(models.Model):
-    pass
+class Comment(models.Model):
+    team = models.ForeignKey(Team, verbose_name='팀', related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, verbose_name='작성자', related_name='comments', on_delete=models.CASCADE)
+    body = models.CharField('본문', max_length=300)
+    created_at = models.DateTimeField('생성 시각', auto_now_add=True)
+    updated_at = models.DateTimeField('수정 시각', auto_now=True)
