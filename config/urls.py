@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from teams.urls import team_router, tag_router
+from teams.urls import team_router, tag_router, comment_router
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -41,4 +41,5 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     path('team/', include(team_router.urls)),
     path('tag/', include(tag_router.urls)),
+    path('comment/', include(comment_router.urls)),
 ]
