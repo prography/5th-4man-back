@@ -44,6 +44,8 @@ class Team(models.Model):
 
 
 class Comment(models.Model):
+    parent = models.ForeignKey("self", verbose_name='부모 댓글', related_name='child_comments', on_delete=models.CASCADE,
+                               blank=True, null=True)
     team = models.ForeignKey(Team, verbose_name='팀', related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(User, verbose_name='작성자', related_name='comments', on_delete=models.CASCADE)
     body = models.CharField('본문', max_length=300)
