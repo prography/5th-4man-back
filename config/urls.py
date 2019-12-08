@@ -42,4 +42,5 @@ urlpatterns = [
     path('team/', include(team_router.urls)),
     path('tag/', include(tag_router.urls)),
     path('comment/', include(comment_router.urls)),
+    path('application/', include('applications.urls')),
 ]
