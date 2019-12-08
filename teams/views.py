@@ -1,7 +1,6 @@
 from django.db.models import Count
-from rest_framework import filters
+from rest_framework import filters, status, mixins
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -28,6 +27,16 @@ class CommentViewSet(mixins.CreateModelMixin,
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        team = serializer.instance.team
+        comment_queryset = team.comments.filter(parent=None)
+        data = self.get_serializer(comment_queryset, many=True).data
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class TeamViewSet(ModelViewSet):
