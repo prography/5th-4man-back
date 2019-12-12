@@ -34,7 +34,8 @@ class CommentSerializer(ChildCommentSerializer):
 
 class TeamSerializer(serializers.ModelSerializer):
     leader = TeammateSerializer(read_only=True)
-    tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), pk_field=serializers.CharField())
+    tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), pk_field=serializers.CharField(),
+                                              required=False)
     likes = TeammateSerializer(read_only=True, many=True)
     image = serializers.ImageField(required=False, use_url=True)
     parent_comments = serializers.SerializerMethodField()
