@@ -28,8 +28,11 @@ class ChildCommentSerializer(serializers.ModelSerializer):
 class CommentSerializer(ChildCommentSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['child_comments_count'] = serializers.SerializerMethodField()
         self.fields['child_comments'] = self.__class__.__base__(many=True, read_only=True)
-        self.Meta.fields.append('child_comments')
+
+    def get_child_comments_count(self, obj):
+        return obj.child_comments.count()
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -39,14 +42,18 @@ class TeamSerializer(serializers.ModelSerializer):
     likes = TeammateSerializer(read_only=True, many=True)
     image = serializers.ImageField(required=False, use_url=True)
     parent_comments = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Team
         fields = (
             'id', 'tags', 'likes', 'like_count', 'leader', 'title', 'end_date', 'description', 'image', 'max_personnel',
-            'current_personnel', 'parent_comments', 'created_at', 'updated_at')
+            'current_personnel', 'comments_count', 'parent_comments', 'created_at', 'updated_at')
 
     def get_parent_comments(self, obj):
         parent_comments = obj.comments.filter(parent=None)
         serializer = CommentSerializer(parent_comments, many=True)
         return serializer.data
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
