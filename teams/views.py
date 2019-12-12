@@ -1,4 +1,5 @@
 from django.db.models import Count
+from django.contrib.auth import get_user_model
 from rest_framework import filters, status, mixins
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
@@ -7,6 +8,8 @@ from rest_framework.response import Response
 from .models import Team, Tag, Comment
 from .serializers import TeamSerializer, TagSerializer, CommentSerializer
 from .permissions import IsLeaderOrReadCreateOnly, IsAuthor
+
+User = get_user_model()
 
 
 class TagViewSet(ModelViewSet):
@@ -23,10 +26,17 @@ class CommentViewSet(mixins.CreateModelMixin,
                      GenericViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated, IsAuthor)
+    # TODO: 테스트 끝나면 고쳐야 하는 부분
+    # permission_classes = (IsAuthenticated, IsAuthor)
+    #
+    # def perform_create(self, serializer):
+    #     serializer.save(author=self.request.user)
+
+    permission_classes = (AllowAny,)
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author=User.objects.get(username='admin'))
+
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
