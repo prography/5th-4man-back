@@ -54,7 +54,7 @@ class TeamViewSet(ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly, IsLeaderOrReadCreateOnly)
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('created_at', 'like_count')
-    ordering = ('created_at',)
+    ordering = ('-created_at',)
 
     def filter_queryset(self, queryset):
         queryset = queryset.annotate(like_count=Count('likes'))
