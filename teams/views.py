@@ -37,7 +37,6 @@ class CommentViewSet(mixins.CreateModelMixin,
     def perform_create(self, serializer):
         serializer.save(author=User.objects.get(username='admin'))
 
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -68,7 +67,7 @@ class TeamViewSet(ModelViewSet):
     def recent(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    @action(methods=["get"], detail=True, name="Like Team")
+    @action(methods=["post"], detail=True, name="Like Team")
     def like(self, request, pk=None):
         user = request.user
         team = self.get_object()
@@ -78,3 +77,12 @@ class TeamViewSet(ModelViewSet):
         else:
             team.likes.add(user)
         return Response(TeamSerializer(team).data)
+
+    @action(methods=["get"], detail=True, url_path='comment')
+    def list_comments(self, request, pk=None):
+        team = self.get_object()
+        parent_comments = team.comments.filter(parent=None)
+        data = {'comments_count': team.comments.count(),
+                'parent_comments': CommentSerializer(parent_comments, many=True).data
+                }
+        return Response(data)
