@@ -5,14 +5,13 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .serializers import SocialTokenObtainPairSerializer, UserSerializer
-from .permissions import IsSelfOrReadCreateOnly
+from .serializers import SocialTokenObtainAccessSerializer, UserSerializer
 from rest_framework.permissions import AllowAny
 User = get_user_model()
 
 
-class SocialTokenObtainPairView(TokenObtainPairView):
-    serializer_class = SocialTokenObtainPairSerializer
+class SocialTokenObtainAccessView(TokenObtainPairView):
+    serializer_class = SocialTokenObtainAccessSerializer
 
 
 class GithubOauthRedirectView(APIView):

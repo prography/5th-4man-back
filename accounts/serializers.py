@@ -30,7 +30,7 @@ class SocialTokenObtainSerializer(jwt_serializer.TokenObtainSerializer):
         return {}
 
 
-class SocialTokenObtainPairSerializer(SocialTokenObtainSerializer):
+class SocialTokenObtainAccessSerializer(SocialTokenObtainSerializer):
     @classmethod
     def get_token(cls, user):
         return RefreshToken.for_user(user)
@@ -39,7 +39,6 @@ class SocialTokenObtainPairSerializer(SocialTokenObtainSerializer):
         data = super().validate(attrs)
         refresh = self.get_token(self.user)
 
-        data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
         data['user_id'] = self.user.id
         data['is_new'] = False
