@@ -6,7 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .serializers import SocialTokenObtainAccessSerializer, UserSerializer
-from rest_framework.permissions import AllowAny
+from .permissions import IsSelfOrReadCreateOnly
+
 User = get_user_model()
 
 
@@ -24,8 +25,7 @@ class GithubOauthRedirectView(APIView):
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [IsSelfOrReadCreateOnly]
-    permission_classes = [AllowAny]
+    permission_classes = [IsSelfOrReadCreateOnly]
     UNIQUE_FIELD = ['username', 'email', 'nickname']
 
     @action(methods=["post"], detail=False, url_path='check/duplication')
@@ -39,3 +39,9 @@ class UserViewSet(ModelViewSet):
             is_duplicated = queryset.filter(**{key: value}).exists()
             response_data[key] = is_duplicated
         return Response(response_data)
+
+    @action(methods=["get"], detail=False, url_path="self")
+    def retrieve_request_user(self, request, *args, **kwargs):
+        user = request.user
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
