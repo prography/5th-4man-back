@@ -26,16 +26,10 @@ class CommentViewSet(mixins.CreateModelMixin,
                      GenericViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    # TODO: 테스트 끝나면 고쳐야 하는 부분
-    # permission_classes = (IsAuthenticated, IsAuthor)
-    #
-    # def perform_create(self, serializer):
-    #     serializer.save(author=self.request.user)
-
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated, IsAuthor)
 
     def perform_create(self, serializer):
-        serializer.save(author=User.objects.get(username='admin'))
+        serializer.save(author=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
