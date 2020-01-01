@@ -54,8 +54,8 @@ class UserViewSet(ModelViewSet):
         serializer = TeamSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(methods=["get"], detail=False, url_path="self/joined/teams")
-    def get_my_joined_teams(self, request, *args, **kwargs):
+    @action(methods=["get"], detail=False, url_path="self/applied/teams")
+    def get_my_applied_teams(self, request, *args, **kwargs):
         queryset = Team.objects.filter(applications__applicant=request.user)
         serializer = TeamSerializer(queryset, many=True)
         return Response(serializer.data)
