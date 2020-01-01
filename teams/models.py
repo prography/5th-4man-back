@@ -4,14 +4,6 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Recruit(models.Model):
-    pass
-
-
-class Application(models.Model):
-    pass
-
-
 class Tag(models.Model):
     name = models.CharField(max_length=10, primary_key=True)
 
@@ -29,7 +21,6 @@ class Team(models.Model):
     end_date = models.DateTimeField('마감일')
     description = models.TextField('세부 설명')
     max_personnel = models.PositiveSmallIntegerField('최대 인원')
-    current_personnel = models.PositiveSmallIntegerField('현재 인원', default=0)
     created_at = models.DateTimeField('생성 시각', auto_now_add=True)
     updated_at = models.DateTimeField('수정 시각', auto_now=True)
 
@@ -38,9 +29,16 @@ class Team(models.Model):
         like_count = getattr(self, '__like_count', self.likes.count())
         return like_count
 
+    # Todo: DB 최적화 확인하기. annotate, select(prefetch) related ...
+    @property
+    def current_personnel(self):
+        current_personnel = self.applications.count()
+        return current_personnel
+
     @like_count.setter
     def like_count(self, count):
         self.__like_count = count
+
 
 
 class Comment(models.Model):
