@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from teams.models import Team
-from teams.serializers import TeamSerializer
+from teams.serializers import TeamListSerializer
 from .serializers import SocialTokenObtainAccessSerializer, UserSerializer
 from .permissions import IsSelfOrReadCreateOnly
 
@@ -51,11 +51,11 @@ class UserViewSet(ModelViewSet):
     @action(methods=["get"], detail=False, url_path="self/own/teams")
     def get_my_own_teams(self, request, *args, **kwargs):
         queryset = Team.objects.filter(leader=request.user)
-        serializer = TeamSerializer(queryset, many=True)
+        serializer = TeamListSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(methods=["get"], detail=False, url_path="self/applied/teams")
     def get_my_applied_teams(self, request, *args, **kwargs):
         queryset = Team.objects.filter(applications__applicant=request.user)
-        serializer = TeamSerializer(queryset, many=True)
+        serializer = TeamListSerializer(queryset, many=True)
         return Response(serializer.data)

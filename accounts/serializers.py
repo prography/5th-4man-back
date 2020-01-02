@@ -52,10 +52,12 @@ class SocialTokenObtainAccessSerializer(SocialTokenObtainSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    upload_image = serializers.ImageField(write_only=True, required=False, use_url=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'nickname', 'email', 'introduction')
+        fields = ('id', 'username', 'password', 'nickname', 'email', 'introduction', 'image', 'upload_image',
+                  'is_github_authenticated')
 
     def create(self, validated_data):
         user = self.Meta.model.objects.create_user(**validated_data)
