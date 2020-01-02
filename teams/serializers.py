@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework.fields import CreateOnlyDefault, CurrentUserDefault
 from .models import Team, Tag, Comment
 
 User = get_user_model()
@@ -18,7 +19,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class ChildCommentSerializer(serializers.ModelSerializer):
-    author = TeammateSerializer(read_only=True)
+    author = TeammateSerializer(default=CreateOnlyDefault(CurrentUserDefault()))
 
     class Meta:
         model = Comment
@@ -36,7 +37,7 @@ class CommentSerializer(ChildCommentSerializer):
 
 
 class TeamListSerializer(serializers.ModelSerializer):
-    leader = TeammateSerializer(read_only=True)
+    leader = TeammateSerializer(default=CreateOnlyDefault(CurrentUserDefault()))
     tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), pk_field=serializers.CharField(),
                                               required=False)
     likes = TeammateSerializer(read_only=True, many=True)

@@ -12,3 +12,8 @@ class Application(models.Model):
     github_account = models.CharField('깃허브 계정', max_length=20)
     created_at = models.DateTimeField('생성 시각', auto_now_add=True)
     updated_at = models.DateTimeField('수정 시각', auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['team', 'applicant'], name='unique_application'),
+        ]
