@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Team, Tag, Comment
-from .serializers import TeamSerializer, TagSerializer, CommentSerializer
+from .serializers import TeamListSerializer, TeamDetailSerializer, TagSerializer, CommentSerializer
 from .permissions import IsLeaderOrReadCreateOnly, IsAuthor
 
 User = get_user_model()
@@ -44,11 +44,16 @@ class CommentViewSet(mixins.CreateModelMixin,
 
 class TeamViewSet(ModelViewSet):
     queryset = Team.objects.all()
-    serializer_class = TeamSerializer
+    serializer_class = TeamListSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsLeaderOrReadCreateOnly)
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('created_at', 'like_count')
     ordering = ('-created_at',)
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return TeamDetailSerializer
+        return self.serializer_class
 
     def filter_queryset(self, queryset):
         queryset = queryset.annotate(like_count=Count('likes'))
