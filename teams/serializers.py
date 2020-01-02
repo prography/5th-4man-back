@@ -35,7 +35,7 @@ class CommentSerializer(ChildCommentSerializer):
         return obj.child_comments.count()
 
 
-class TeamSerializer(serializers.ModelSerializer):
+class TeamListSerializer(serializers.ModelSerializer):
     leader = TeammateSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), pk_field=serializers.CharField(),
                                               required=False)
@@ -46,9 +46,9 @@ class TeamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Team
-        fields = (
+        fields = [
             'id', 'tags', 'likes', 'like_count', 'leader', 'title', 'end_date', 'description', 'image', 'max_personnel',
-            'current_personnel', 'comments_count', 'parent_comments', 'created_at', 'updated_at')
+            'current_personnel', 'comments_count', 'parent_comments', 'created_at', 'updated_at']
 
     def get_parent_comments(self, obj):
         parent_comments = obj.comments.filter(parent=None)
@@ -57,3 +57,15 @@ class TeamSerializer(serializers.ModelSerializer):
 
     def get_comments_count(self, obj):
         return obj.comments.count()
+
+
+class TeamDetailSerializer(TeamListSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_applied'] = serializers.SerializerMethodField()
+
+    def get_is_applied(self, team):
+        user = self.context['request'].user
+        if user.is_anonymous or not user.applications.filter(team=team).exists():
+            return False
+        return True
