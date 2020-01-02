@@ -28,9 +28,6 @@ class CommentViewSet(mixins.CreateModelMixin,
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticated, IsAuthor)
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -75,7 +72,7 @@ class TeamViewSet(ModelViewSet):
             team.likes.remove(user)
         else:
             team.likes.add(user)
-        return Response(TeamSerializer(team).data)
+        return Response(TeamListSerializer(team).data)
 
     @action(methods=["get"], detail=True, url_path='comment')
     def list_comments(self, request, pk=None):
