@@ -186,7 +186,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=200),
+    'ACCESS_TOKEN_LIFETIME': timedelta(weeks=200),
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
