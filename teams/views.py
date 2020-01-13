@@ -56,7 +56,7 @@ class TeamViewSet(ModelViewSet):
         queryset = super().get_queryset()
         tags = self.request.query_params.getlist('tag')
         if tags:
-            queryset = queryset.filter(tags__in=tags)
+            queryset = queryset.filter(tags__in=tags).annotate(num_tags=Count('tags')).filter(num_tags=len(tags))
         return queryset
 
     def filter_queryset(self, queryset):
