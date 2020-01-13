@@ -52,6 +52,13 @@ class TeamViewSet(ModelViewSet):
             return TeamDetailSerializer
         return self.serializer_class
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        tags = self.request.query_params.getlist('tag')
+        if tags:
+            queryset = queryset.filter(tags__in=tags)
+        return queryset
+
     def filter_queryset(self, queryset):
         queryset = queryset.annotate(like_count=Count('likes'))
         return super().filter_queryset(queryset)
