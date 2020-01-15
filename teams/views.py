@@ -5,9 +5,10 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from applications.serializers import ApplicationSerializer
 from .models import Team, Tag, Comment
 from .serializers import TeamListSerializer, TeamDetailSerializer, TagSerializer, CommentSerializer
-from .permissions import IsLeaderOrReadCreateOnly, IsAuthor
+from .permissions import IsLeaderOrReadCreateOnly, IsAuthor, IsLeader
 
 User = get_user_model()
 
@@ -89,3 +90,9 @@ class TeamViewSet(ModelViewSet):
                 'parent_comments': CommentSerializer(parent_comments, many=True).data
                 }
         return Response(data)
+
+    @action(methods=["get"], detail=True, url_path='application', permission_classes=[IsAuthenticated, IsLeader])
+    def list_applications(self, request, pk=None):
+        team = self.get_object()
+        applications = team.applications.all()
+        return Response(ApplicationSerializer(applications, many=True).data)
