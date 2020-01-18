@@ -8,6 +8,9 @@ class GithubProfile(models.Model):
     email = models.EmailField('이메일', blank=True, null=True)
     languages = models.TextField('언어', blank=True)
 
+    def __str__(self):
+        return self.login
+
 
 class User(AbstractUser):
     profile = models.OneToOneField(GithubProfile, on_delete=models.SET_NULL, null=True, blank=True,
