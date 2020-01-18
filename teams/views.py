@@ -19,11 +19,6 @@ class TagViewSet(ModelViewSet):
     permission_classes = (AllowAny,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    queryset_size = 5
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset[:5]
 
 
 class CommentViewSet(mixins.CreateModelMixin,
