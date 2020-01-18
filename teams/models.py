@@ -12,6 +12,12 @@ class Tag(models.Model):
 
 
 class Team(models.Model):
+    STATUS_WAITING, STATUS_EXPIRY, STATUS_COMPLETE = "waiting", "expiry", "complete"
+    STATUS_CHOICES = (
+        (STATUS_WAITING, '대기중'),
+        (STATUS_EXPIRY, '만료됨'),
+        (STATUS_COMPLETE, '완됨'),
+    )
     leader = models.ForeignKey(User, related_name='teams', verbose_name='리더', on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag, related_name='teams', verbose_name='태그', blank=True)
     title = models.CharField('제목', max_length=20)
@@ -23,6 +29,7 @@ class Team(models.Model):
     max_personnel = models.PositiveSmallIntegerField('최대 인원')
     created_at = models.DateTimeField('생성 시각', auto_now_add=True)
     updated_at = models.DateTimeField('수정 시각', auto_now=True)
+    status = models.CharField('상태', max_length=10, choices=STATUS_CHOICES, default=STATUS_WAITING)
 
     @property
     def like_count(self):
@@ -38,7 +45,6 @@ class Team(models.Model):
     @like_count.setter
     def like_count(self, count):
         self.__like_count = count
-
 
 
 class Comment(models.Model):
