@@ -17,7 +17,8 @@ class User(AbstractUser):
                                    related_name='user', verbose_name='프로필')
     nickname = models.CharField('별명', max_length=10, blank=True)
     introduction = models.CharField('한 줄 소개', max_length=100, blank=True)
-    upload_image = models.ImageField('프로필 사진', upload_to="user_image/profile/%Y/%m/%d/", blank=True)
+    upload_image = models.ImageField('프로필 사진', upload_to="user_image/profile/%Y/%m/%d/", blank=True,
+                                     default='default_user_image.png')
 
     @property
     def is_github_authenticated(self):
@@ -25,8 +26,8 @@ class User(AbstractUser):
 
     @property
     def image(self):
-        if self.upload_image.name != '':
-            return self.upload_image
+        if self.upload_image.name != "default_user.image.png":
+            return self.upload_image.url
         elif self.profile_id is not None:
             return self.profile.avatar
-        return ""
+        return self.upload_image.url
