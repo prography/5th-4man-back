@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.fields import CreateOnlyDefault, CurrentUserDefault
 from .models import Team, Tag, Comment
+from applications.models import Application
 
 User = get_user_model()
 
@@ -72,3 +73,16 @@ class TeamDetailSerializer(TeamListSerializer):
         if user.is_anonymous or not user.applications.filter(team=team).exists():
             return False
         return True
+
+
+class TeamListApplicationStatusSerializer(TeamListSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['application_status'] = serializers.SerializerMethodField()
+
+    def get_application_status(self, team):
+        user = self.context['request'].user
+        try:
+            return team.applications.get(applicant=user).get_status_display()
+        except Application.DoesNotExist:
+            return Application.STATUS_DEFAULT_DISPLAY

@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from teams.models import Team
-from teams.serializers import TeamListSerializer
+from teams.serializers import TeamListSerializer, TeamListApplicationStatusSerializer
 from .serializers import SocialTokenObtainAccessSerializer, UserSerializer
 from .permissions import IsSelfOrReadCreateOnly
 
@@ -57,5 +57,5 @@ class UserViewSet(ModelViewSet):
     @action(methods=["get"], detail=False, url_path="self/applied/teams")
     def get_my_applied_teams(self, request, *args, **kwargs):
         queryset = Team.objects.filter(applications__applicant=request.user)
-        serializer = TeamListSerializer(queryset, many=True)
+        serializer = TeamListApplicationStatusSerializer(queryset, context={'request': request}, many=True)
         return Response(serializer.data)

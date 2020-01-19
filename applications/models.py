@@ -8,11 +8,12 @@ User = get_user_model()
 class Application(models.Model):
     STATUS_WAITING, STATUS_EXPIRY, STATUS_APPROVED, STATUS_REFUSE = "waiting", "expiry", "approved", "refuse"
     STATUS_CHOICES = (
-        (STATUS_WAITING, '대기중'),
-        (STATUS_EXPIRY, '만료됨'),
-        (STATUS_APPROVED, '승인됨'),
-        (STATUS_REFUSE, '거절됨'),
+        (STATUS_WAITING, '승인 대기'),
+        (STATUS_EXPIRY, '만료'),
+        (STATUS_APPROVED, '승인 완료'),
+        (STATUS_REFUSE, '승인 거절'),
     )
+    STATUS_DEFAULT_DISPLAY = '대기중'
     team = models.ForeignKey(Team, verbose_name='팀', related_name='applications', on_delete=models.CASCADE)
     applicant = models.ForeignKey(User, verbose_name='지원자', related_name='applications', on_delete=models.CASCADE)
     reason = models.TextField('지원 동기', max_length=200)
