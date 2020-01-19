@@ -26,7 +26,7 @@ class User(AbstractUser):
 
     @property
     def image(self):
-        if self.upload_image.name != "default_user.image.png":
+        if self.upload_image.name != "default_user_image.png":
             return self.upload_image.url
         elif self.profile_id is not None:
             return self.profile.avatar
