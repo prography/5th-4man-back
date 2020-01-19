@@ -42,15 +42,15 @@ class CommentViewSet(mixins.CreateModelMixin,
 
 class TeamViewSet(ModelViewSet):
     queryset = Team.objects.all()
-    serializer_class = TeamListSerializer
+    serializer_class = TeamDetailSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsLeaderOrReadCreateOnly)
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('created_at', 'like_count')
     ordering = ('-created_at',)
 
     def get_serializer_class(self):
-        if self.action == 'retrieve':
-            return TeamDetailSerializer
+        if self.action == 'list':
+            return TeamListSerializer
         return self.serializer_class
 
     def get_queryset(self):

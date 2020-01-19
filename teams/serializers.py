@@ -64,6 +64,8 @@ class TeamDetailSerializer(TeamListSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['is_applied'] = serializers.SerializerMethodField()
+        self.fields['kakao_chat_url'] = serializers.URLField()
+        # self.fields['status'] = serializers.SerializerMethodField(method_name="get_status_display")
 
     def get_is_applied(self, team):
         user = self.context['request'].user
