@@ -25,4 +25,4 @@ class ApplicationViewSet(ModelViewSet):
 
     @action(methods=["post"], detail=True, permission_classes=[IsAuthenticated, IsTeamLeader], url_path="approve")
     def approve_application(self, request, pk=None):
-        return self._change_application_status(request, 'approved', pkq)
+        return self._change_application_status(request, 'approved', pk)
