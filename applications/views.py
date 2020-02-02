@@ -17,7 +17,7 @@ class ApplicationViewSet(ModelViewSet):
         team.status = status
         team.save()
         serializer = self.get_serializer()
-        return Response(serializer(team))
+        return Response(serializer(team).data)
 
     @action(methods=["post"], detail=True, permission_classes=[IsAuthenticated, IsTeamLeader], url_path="refuse")
     def refuse_application(self, request, pk=None):
