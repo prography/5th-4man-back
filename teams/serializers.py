@@ -65,6 +65,8 @@ class TeamDetailSerializer(TeamListSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['is_applied'] = serializers.SerializerMethodField()
+        self.fields['application_status'] = serializers.SerializerMethodField()
+        self.fields['chat_url'] = serializers.SerializerMethodField()
         # self.fields['kakao_chat_url'] = serializers.URLField()
         # self.fields['status'] = serializers.SerializerMethodField(method_name="get_status_display")
 
@@ -74,6 +76,28 @@ class TeamDetailSerializer(TeamListSerializer):
             return False
         return True
 
+    def get_application_status(self, team):
+        user = self.context['request'].user
+        if user.is_anonymous:
+            return ""
+        try:
+            return team.applications.get(applicant=user).get_status_display()
+        except Application.DoesNotExist:
+            return ""
+
+    def get_chat_url(self, team):
+        user = self.context['request'].user
+        if user.is_anonymous:
+            return ""
+        if team.leader == user:
+            return team.kakao_chat_url
+        try:
+            application = team.applications.get(applicant=user)
+        except Application.DoesNotExist:
+            return ""
+        if application.status == 'approved':
+            return team.kakao_chat_url
+        return ""
 
 class TeamListApplicationStatusSerializer(TeamListSerializer):
     def __init__(self, *args, **kwargs):
