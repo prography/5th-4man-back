@@ -28,7 +28,7 @@ future==0.16.0
 idna==2.7
 inflection==0.3.1
 itypes==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 jmespath==0.9.4
 jsonschema==2.6.0
 MarkupSafe==1.1.1
